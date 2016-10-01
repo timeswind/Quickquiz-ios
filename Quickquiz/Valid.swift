@@ -10,37 +10,34 @@ import Foundation
 import JWTDecode
 import SwiftyJSON
 
-class Login {
+class Valid {
     
-    public func tokenValid() -> Bool {
+    internal func tokenValid() -> Bool {
         let isLogin = NSUserDefaults.standardUserDefaults().objectForKey("isLogin")
+        var result:Bool = false
         if (isLogin != nil && isLogin as! Bool == true) {
             if (NSUserDefaults.standardUserDefaults().objectForKey("token") != nil) {
                 let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as! String
-                //                let role = NSUserDefaults.standardUserDefaults().objectForKey("role") as! String
-                
                 do {
                     let expireAt = try decode(token).expiresAt
                     let currentDate = NSDate()
                     
                     if expireAt!.compare(currentDate) == NSComparisonResult.OrderedDescending {
-                        return true
+                        result = true
                     } else {
-                        return false
+                        result = false
                     }
                     
                 } catch {
                     print("Failed to decode JWT: \(error)")
                 }
             } else {
-                return false
+                result = false
             }
             
         } else {
-            return false
+            result = false
         }
+        return result
     }
-    
-    
-    
 }

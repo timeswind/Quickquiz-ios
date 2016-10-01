@@ -7,7 +7,20 @@
 //
 
 import UIKit
+import SwiftyJSON
 
-class QuickquizCollectionViewCell: UICollectionViewCell {
-    
+class QuickquizCollectionViewCell: UICollectionViewCell {    
+    @IBOutlet var cardWrapperView: UIView!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var statusLabel: UILabel!
+    @IBOutlet var startTimeLabel: UILabel!
+    @IBOutlet var finishTimeLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
+    @IBOutlet var scoreLabel: UILabel!
+
+//    func setUpView(quickquiz: JSON) {
+//        let quizTitle = quickquiz["title"].stringValue
+//        titleLabel?.text = quizTitle
+//        
+//    }
 }

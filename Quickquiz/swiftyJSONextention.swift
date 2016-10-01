@@ -7,3 +7,31 @@
 //
 
 import Foundation
+
+import SwiftyJSON
+
+extension JSON {
+    
+    public var date: NSDate? {
+        get {
+            switch self.type {
+            case .String:
+                return Formatter.jsonDateFormatter.dateFromString(self.object as! String)
+            default:
+                return nil
+            }
+        }
+    }
+    
+    public var dateTime: NSDate? {
+        get {
+            switch self.type {
+            case .String:
+                return Formatter.jsonDateTimeFormatter.dateFromString(self.object as! String)
+            default:
+                return nil
+            }
+        }
+    }
+    
+}
