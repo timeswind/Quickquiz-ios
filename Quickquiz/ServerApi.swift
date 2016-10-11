@@ -76,7 +76,7 @@ class ServerApi {
     private func fetchStudentToken(password:String, completion:(Bool) -> ()) {
         let schoolid:String = NSUserDefaults.standardUserDefaults().stringForKey("schoolid")!
         
-        let request = NSMutableURLRequest(URL: NSURL(string: server + "/login/student")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: server + "/api/login/student")!)
         request.HTTPMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
@@ -85,11 +85,12 @@ class ServerApi {
         request.HTTPBody = try! NSJSONSerialization.dataWithJSONObject(postBodyData, options: [])
         
         Alamofire.request(request)
+            .validate(contentType: ["application/json"])
             .responseJSON { response in
                 
                 if let result = response.result.value {
                     
-                    if result.isEqual("FAIL") {
+                    if response.response?.statusCode == 401 {
                         
                         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isLogin")
                         completion(false)
@@ -114,6 +115,9 @@ class ServerApi {
                         completion(true)
                         
                     }
+                } else {
+                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isLogin")
+                    completion(false)
                 }
         }
     }
@@ -121,7 +125,7 @@ class ServerApi {
     private func fetchTeacherToken(password:String, completion:(Bool) -> ()) {
         let email:String = NSUserDefaults.standardUserDefaults().stringForKey("email")!
         
-        let request = NSMutableURLRequest(URL: NSURL(string: server + "/login")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: server + "/api/login")!)
         request.HTTPMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         

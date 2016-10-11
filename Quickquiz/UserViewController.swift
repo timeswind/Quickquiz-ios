@@ -80,9 +80,11 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
                     var quiztitles:[String] = []
                     var quizRightCountSets: [Double] = []
                     for (_, quizsample) in quizsample_list {
-                        quiztitles.append(quizsample["quickquiz"]["title"].stringValue)
-                        let quizScore = AnalysisQuiz().calculateScore(quizsample)
-                        quizRightCountSets.append(Double(quizScore))
+                        if (quizsample["quickquiz"]["finished"].boolValue) {
+                            quiztitles.append(quizsample["quickquiz"]["title"].stringValue)
+                            let quizScore = AnalysisQuiz().calculateScore(quizsample)
+                            quizRightCountSets.append(Double(quizScore))
+                        }
                     }
                     
                     QuizPerformanceTrackLineChartView = QuizPerformanceTrackChartView(frame: CGRectMake(16, 16, self.view.frame.width - 32, 268), dataPoints: quiztitles, values: quizRightCountSets)

@@ -67,10 +67,11 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
         progBar.trackTintColor = UIColor.clearColor()
         progBar.progress = 0.0
         progBar.tintColor = UIColor(red: CGFloat(0.0/255.0), green: CGFloat(122.0/255.0), blue: CGFloat(255.0/255.0), alpha: CGFloat(1.0))
+        progBar.tag = 1000
         
         self.navigationController?.navigationBar.addSubview(progBar)
     }
-    
+
     
     func webView(webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
@@ -87,6 +88,12 @@ class WebViewController: UIViewController, WKNavigationDelegate, WKUIDelegate {
     
     override func viewWillDisappear(animated: Bool) {
         webView?.removeObserver(self, forKeyPath: "estimatedProgress")
+        let subViews = self.navigationController?.navigationBar.subviews
+        for subview in subViews!{
+            if subview.tag == 1000 {
+                subview.removeFromSuperview()
+            }
+        }
     }
     
 }

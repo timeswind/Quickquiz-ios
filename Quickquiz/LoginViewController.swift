@@ -15,7 +15,7 @@ import JWTDecode
 
 class LoginViewController: UIViewController {
     
-    var role:String = "teacher"
+    var role:String = "student"
     
     @IBOutlet var switchRoleButton: UIButton!
     @IBOutlet var loginButton: UIButton!
@@ -27,26 +27,27 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        accountTextField.placeholder = "教師郵箱"
+        accountTextField.placeholder = "學號"
         passwordTextField.placeholder = "密碼"
         passwordTextField.secureTextEntry = true
-        switchRoleButton.setTitle("切換至學生登入", forState: .Normal)
+//        switchRoleButton.setTitle("切換至學生登入", forState: .Normal)
+        switchRoleButton.hidden = true
         loginButton.setTitle("登入", forState: .Normal)
         warnMessage.hidden = true
         // Do any additional setup after loading the view.
     }
     
     @IBAction func switchRole(sender: AnyObject) {
-        if (role == "teacher") {
-            role = "student"
-            accountTextField.placeholder = "學號"
-            switchRoleButton.setTitle("切換至教師登入", forState: .Normal)
-            
-        } else {
-            role = "teacher"
-            accountTextField.placeholder = "教師郵箱"
-            switchRoleButton.setTitle("切換至學生登入", forState: .Normal)
-        }
+//        if (role == "teacher") {
+//            role = "student"
+//            accountTextField.placeholder = "學號"
+//            switchRoleButton.setTitle("切換至教師登入", forState: .Normal)
+//            
+//        } else {
+//            role = "teacher"
+//            accountTextField.placeholder = "教師郵箱"
+//            switchRoleButton.setTitle("切換至學生登入", forState: .Normal)
+//        }
     }
     
     @IBAction func login(sender: AnyObject) {
@@ -54,7 +55,7 @@ class LoginViewController: UIViewController {
             
             if(isValidEmail(accountTextField.text!)) {
                 warnMessage.hidden = true
-                let request = NSMutableURLRequest(URL: NSURL(string: GlobalVariables.sharedInstance.serverIp + "/login")!)
+                let request = NSMutableURLRequest(URL: NSURL(string: GlobalVariables.sharedInstance.serverIp + "/api/login")!)
                 request.HTTPMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 
@@ -112,7 +113,7 @@ class LoginViewController: UIViewController {
             if(accountTextField.text!.characters.count == 8) {
                 warnMessage.hidden = true
                 
-                let apiURL = (GlobalVariables.sharedInstance.serverIp + "/login/student")
+                let apiURL = (GlobalVariables.sharedInstance.serverIp + "/api/login/student")
 //                let request = NSMutableURLRequest(URL: NSURL(string: GlobalVariables.sharedInstance.serverIp + "/login/student")!)
 //                request.HTTPMethod = "POST"
 //                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -128,14 +129,14 @@ class LoginViewController: UIViewController {
                 self.loginButton.enabled = false
                 
                 Alamofire.request(.POST, apiURL, parameters: postData)
+                    .validate(contentType: ["application/json"])
                     .responseJSON { response in
-                        print(response)
                         debugPrint(response)
                         if let result = response.result.value {
                             
-                            print(result)
+                            print(response.response?.statusCode)
                             
-                            if result.isEqual("student login fail") {
+                            if response.response?.statusCode == 401 {
                                 
                                 self.warnMessage.text = "登入失败"
                                 self.warnMessage.hidden = false
@@ -163,6 +164,11 @@ class LoginViewController: UIViewController {
                                 
                                 self.dismissViewControllerAnimated(true, completion: nil)
                             }
+                        } else {
+                            self.warnMessage.text = "登入失败"
+                            self.warnMessage.hidden = false
+                            self.passwordTextField.text = nil
+                            self.loginButton.enabled = true
                         }
                 }
                 

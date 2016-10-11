@@ -30,7 +30,7 @@ class AnalysisQuiz {
         
         return score
     }
-
+    
     func totalPercentage(quizsamples: JSON) -> [Double] {
         var totalRightCount:Int = 0
         var totalWrongCount:Int = 0
@@ -48,14 +48,14 @@ class AnalysisQuiz {
                 if (quizsample["results"]["blank"].array != nil) {
                     totalBlankCount += quizsample["results"]["blank"].arrayValue.count
                 }
-
+                
             }
         }
         
         
         return [Double(totalRightCount),Double(totalWrongCount),Double(totalBlankCount)]
-
+        
     }
     
-
+    
 }

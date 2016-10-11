@@ -154,7 +154,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         } else {
             cell.finishTimeLabel.hidden = true
             cell.statusLabel?.text = "小測進行中"
-            cell.statusLabel?.textColor = UIColor.greenColor()
+            cell.statusLabel?.textColor = UIColor(red: CGFloat(255.0/255.0), green: CGFloat(143.0/255.0), blue: CGFloat(0.0/255.0), alpha: CGFloat(1.0))
         }
         
         if (quickquiz["quickquiz"]["startTime"].string != nil) {
