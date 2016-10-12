@@ -51,6 +51,8 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func login(sender: AnyObject) {
+        self.accountTextField.userInteractionEnabled = false
+        self.passwordTextField.userInteractionEnabled = false
         if (role == "teacher") {
             
             if(isValidEmail(accountTextField.text!)) {
@@ -73,6 +75,9 @@ class LoginViewController: UIViewController {
                     .responseJSON { response in
                         
                         if let result = response.result.value {
+
+                            self.accountTextField.userInteractionEnabled = true
+                            self.passwordTextField.userInteractionEnabled = true
                             
                             if result.isEqual("FAIL") {
                                 
@@ -134,7 +139,8 @@ class LoginViewController: UIViewController {
                         debugPrint(response)
                         if let result = response.result.value {
                             
-                            print(response.response?.statusCode)
+                            self.accountTextField.userInteractionEnabled = true
+                            self.passwordTextField.userInteractionEnabled = true
                             
                             if response.response?.statusCode == 401 {
                                 

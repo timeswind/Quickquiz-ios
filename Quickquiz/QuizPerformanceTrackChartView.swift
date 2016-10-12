@@ -45,8 +45,8 @@ class QuizPerformanceTrackChartView: UIView {
         }
         
         let chartDataSet = LineChartDataSet(yVals:dataEntries, label: "測驗分數")
-        chartDataSet.setCircleColor(UIColor(hex: 0x3F51B5))
-        chartDataSet.setColor(UIColor(hex: 0x3F51B5))
+        chartDataSet.setCircleColor(UIColor(red: CGFloat(0.0/255.0), green: CGFloat(122.0/255.0), blue: CGFloat(255.0/255.0), alpha: CGFloat(1.0)))
+        chartDataSet.setColor(UIColor(red: CGFloat(0.0/255.0), green: CGFloat(122.0/255.0), blue: CGFloat(255.0/255.0), alpha: CGFloat(1.0)))
         let chartData = LineChartData(xVals: dataPoints, dataSet: chartDataSet)
         chartView.data = chartData
         self.addSubview(chartView)

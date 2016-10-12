@@ -49,8 +49,11 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
         self.validUser()
-        if (!GlobalVariables.sharedInstance.quickquiz_list_load) {
+        if (!GlobalVariables.sharedInstance.quickquiz_list_load && GlobalVariables.sharedInstance.user_valid) {
             self.setUpQuickquizList()
+        } else if (!GlobalVariables.sharedInstance.user_valid) {
+            self.quickquizs = nil
+            self.collectionView.reloadData()
         }
     }
     
@@ -122,7 +125,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("quickquizCell", forIndexPath: indexPath) as! QuickquizCollectionViewCell
         
         cell.cardWrapperView.layer.shadowOffset = CGSize(width: 0, height: 1)
-        cell.cardWrapperView.layer.shadowOpacity = 0.2
+        cell.cardWrapperView.layer.shadowOpacity = 0.1
         cell.cardWrapperView.layer.shadowRadius = 1
         cell.cardWrapperView.layer.cornerRadius = 3
         let dateFormatter = NSDateFormatter()

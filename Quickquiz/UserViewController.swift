@@ -21,11 +21,13 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
     var role = ""
     
     var refreshControl:UIRefreshControl!
+    var ifViewDidLoad = false
     
     @IBOutlet var collectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.ifViewDidLoad = true
+        GlobalVariables.sharedInstance.first_time_userview = false
         screenSize = UIScreen.mainScreen().bounds
         screenWidth = screenSize.width
         screenHeight = screenSize.height
@@ -46,6 +48,14 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
         
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        if (GlobalVariables.sharedInstance.first_time_userview && ifViewDidLoad) {
+            self.setUpViews()
+            GlobalVariables.sharedInstance.first_time_userview = false
+        }
+    }
+    
     func setUpViews() {
         role = GlobalVariables.sharedInstance.user_role
         
@@ -55,7 +65,7 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
     }
     
     func setUpStudentView() {
-        self.navigationItem.title = "學生：\(GlobalVariables.sharedInstance.student_name)"
+        self.title = "學生：\(GlobalVariables.sharedInstance.student_name)"
         collectionView.reloadData()
         stopRefresher()
     }
@@ -67,6 +77,18 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 2
+    }
+    @IBAction func onLogout(sender: AnyObject) {
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isLogin")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("token")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("schoolid")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("role")
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("quickquizs")
+        GlobalVariables.sharedInstance.logout()
+        self.title = ""
+        self.collectionView.reloadData()
+        let tababarController = self.tabBarController! as UITabBarController
+        tababarController.selectedIndex = 0
     }
     
     // make a cell for each cell index path
@@ -92,7 +114,7 @@ class UserViewController: UIViewController, UICollectionViewDataSource, UICollec
                     cardView.addSubview(self.QuizPerformanceTrackLineChartView)
                     cardView.backgroundColor = UIColor.whiteColor()
                     cardView.layer.shadowOffset = CGSize(width: 0, height: 1)
-                    cardView.layer.shadowOpacity = 0.2
+                    cardView.layer.shadowOpacity = 0.1
                     cardView.layer.shadowRadius = 1
                     cardView.layer.cornerRadius = 3
                     cell.addSubview(cardView)

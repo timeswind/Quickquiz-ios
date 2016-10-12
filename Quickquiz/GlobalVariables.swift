@@ -27,6 +27,7 @@ class GlobalVariables {
     var teacher_id:String = ""
     
     var quickquiz_list_load:Bool = false
+    var first_time_userview = true
 //    var token:String = ""
     
     func initUser(rawData:JSON) -> Void {
@@ -44,6 +45,20 @@ class GlobalVariables {
             self.teacher_name = rawData["name"].stringValue
             self.teacher_id = rawData["teacher"].stringValue
         }
+    }
+    
+    func logout() -> Void {
+        self.currentUserRawData = nil
+        self.user_role = ""
+        self.user_valid = false
+        self.school_id = 0
+        self.student_id = ""
+        self.student_name = ""
+        self.teacher_email = ""
+        self.teacher_name = ""
+        self.teacher_id = ""
+        self.quickquiz_list_load = false
+        self.first_time_userview = true
     }
 
 }
